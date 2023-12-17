@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 
 # @filename = "data_03_1_sample.txt"
-@filename = "data_03_2_sample.txt"
-# @filename = "data_03_1.txt"
+# @filename = "data_03_2_sample.txt"
+@filename = "data_03_1.txt"
 
 class Number
   attr_reader :num
-  attr_accessor :symbol, :y, :x1, :x2
+  attr_accessor :symbol, :y, :x1, :x2, :gear
 
   def initialize(num, y, x1, x2)
     @num    = num
@@ -14,6 +14,7 @@ class Number
     @x1 = x1
     @x2 = x2
     @symbol = nil
+    @gear = []
   end
 end
 
@@ -110,6 +111,29 @@ def sum_symbol_nums (numbers)
   end.sum
 end
 
+def check_for_gear(matrix, y, x)
+  y_max = matrix.length; x_max = matrix[0].length
+  if y < 0 || x < 0 || y > (y_max - 1) || x > (x_max - 1)
+    return false
+  elsif matrix[y][x] == "*"
+    return true
+  else
+    return false
+  end
+end
+
+def set_gears(numbers, matrix)
+  numbers.each do |num|
+    for y in (num.y - 1)..(num.y + 1)
+      for x in (num.x1 - 1)..(num.x2 + 1)
+        if check_for_gear(matrix, y, x)
+          num.gear << [y, x]
+        end
+      end
+    end
+  end
+end
+
 matrix = get_matrix_array
 pp matrix
 
@@ -123,7 +147,23 @@ set_coordinates(numbers, matrix.map {|m| m.dup} )
 # pp numbers
 
 set_symbols(numbers, matrix)
-pp numbers
+# pp numbers
 
-pp sum_symbol_nums(numbers)
+# pp sum_symbol_nums(numbers)
 
+set_gears(numbers, matrix)
+# pp numbers
+
+rations = []
+numbers.each_with_index do |num, index|
+  # pp "#{num.num}, #{num.gear[0]}"
+  for n in (index + 1)..(numbers.length - 1)
+    # pp "n: #{n} #{num.gear[0]} #{numbers[n].gear[0]}"
+    if num.gear[0] != nil && num.gear[0] == numbers[n].gear[0]
+      pp "gear! #{num.num} #{numbers[n].num}"
+      rations << num.num * numbers[n].num
+    end
+  end
+end
+
+pp rations.sum
