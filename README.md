@@ -13,3 +13,13 @@ Advent of Code
 - 2016: Haskell            | Bash
 - 2015: My Own CPU (TODO)  | TypeScript
 ```
+
+### Roadmap v2
+```
+- OpenVPN Server Manager
+- DevFramework
+- OpsFramework
+- Nether (main terminal)
+- SSH Portal
+- Deployer
+```
