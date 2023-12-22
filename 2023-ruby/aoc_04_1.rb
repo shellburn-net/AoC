@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 
-require "awesome_print"
-
-# @filename = "data_04_1_sample.txt"
-@filename = "data_04_1.txt"
+@filename = "data_04_1_sample.txt"
+# @filename = "data_04_1.txt"
 
 Card = Struct.new(:id, :nw, :ng, :found, :points)
 
