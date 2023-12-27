@@ -2,7 +2,7 @@
 
 require 'parallel'
 
-# @filename = "data_05_1_sample.txt"
+#@filename = "data_05_1_sample.txt"
 @filename = "data_05_1.txt"
 
 Map = Struct.new(:name, :source, :destination, :range)
@@ -58,7 +58,7 @@ def get_location(maps, i)
   new_seed = i
   maps[0].source.each_with_index do |j, idx|
     # p j
-    if i >= j and i <= j + maps[0].range[idx]
+    if i >= j and i < j + maps[0].range[idx]
       new_seed = i -j + maps[0].destination[idx]
       break
     end
@@ -68,7 +68,7 @@ def get_location(maps, i)
   i = new_seed
   maps[1].source.each_with_index do |j, idx|
     # p j
-    if i >= j and i <= j + maps[1].range[idx]
+    if i >= j and i < j + maps[1].range[idx]
       new_seed = i -j + maps[1].destination[idx]
       break
     end
@@ -77,7 +77,7 @@ def get_location(maps, i)
 
   i = new_seed
   maps[2].source.each_with_index do |j, idx|
-    if i >= j and i <= j + maps[2].range[idx]
+    if i >= j and i < j + maps[2].range[idx]
       # p "found"
       new_seed = i -j + maps[2].destination[idx]
       break
@@ -88,7 +88,7 @@ def get_location(maps, i)
   i = new_seed
   maps[3].source.each_with_index do |j, idx|
     # p j
-    if i >= j and i <= j + maps[3].range[idx]
+    if i >= j and i < j + maps[3].range[idx]
       new_seed = i -j + maps[3].destination[idx]
       break
     end
@@ -98,7 +98,7 @@ def get_location(maps, i)
   i = new_seed
   maps[4].source.each_with_index do |j, idx|
     # p j
-    if i >= j and i <= j + maps[4].range[idx]
+    if i >= j and i < j + maps[4].range[idx]
       new_seed = i -j + maps[4].destination[idx]
       break
     end
@@ -108,7 +108,7 @@ def get_location(maps, i)
   i = new_seed
   maps[5].source.each_with_index do |j, idx|
     # p j
-    if i >= j and i <= j + maps[5].range[idx]
+    if i >= j and i < j + maps[5].range[idx]
       new_seed = i -j + maps[5].destination[idx]
       break
     end
@@ -118,7 +118,7 @@ def get_location(maps, i)
   i = new_seed
   maps[6].source.each_with_index do |j, idx|
     # p j
-    if i >= j and i <= j + maps[6].range[idx]
+    if i >= j and i < j + maps[6].range[idx]
       new_seed = i -j + maps[6].destination[idx]
       break
     end
@@ -139,7 +139,7 @@ def process_seed_pair(maps, seed_pair)
   end
   ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
   elapsed = ending - starting
-  p "Time spent for #{seed_pair[1]}: #{elapsed.round(2)}"
+  p "Time spent for #{seed_pair[1]}: #{elapsed.round(2)}, min: #{min}"
 
   return min, elapsed.round(2)
 end
@@ -175,19 +175,9 @@ _, elapsed = process_seed_pair(maps, seed_pair)
 p seed_pairs
 show_estimation(seed_pairs, elapsed)
 
-# mins = []
-# seed_pairs.each_slice(2) do |a, b|
-#   pair = [a, b]
-#   min = process_seed_pair(maps, pair) 
-#   mins << min
-# end
-#
-
 mins = Parallel.map(seed_pairs.each_slice(2), in_processes: Parallel.processor_count) do |a, b|
   pair = [a, b]
   process_seed_pair(maps, pair)
 end
 
 p mins.min
-
-
